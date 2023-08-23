@@ -54,13 +54,12 @@ class CountryCell: UITableViewCell {
         return view
     }()
 
-    let flagImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        return imageView
+    let flagImageView: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        label.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        return label
     }()
 
     
@@ -90,7 +89,7 @@ class CountryCell: UITableViewCell {
     public func configureCell(country: CountryCodePickerViewController.Country) {
         diallingCodeLabel.text = country.name
         nameLabel.text = country.prefix
-        flagImageView.setImage(from: country.flag)
+        flagImageView.text = country.flag
         
     }
 
@@ -183,18 +182,4 @@ extension CountryCell {
         countryFlagStackView.isHidden = state
     }
     
-}
-
-extension UIImageView {
-    func setImage(from urlString: String) {
-        if let url = URL(string: urlString) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url) {
-                    DispatchQueue.main.async {
-                        self.image = UIImage(data: data)
-                    }
-                }
-            }
-        }
-    }
 }

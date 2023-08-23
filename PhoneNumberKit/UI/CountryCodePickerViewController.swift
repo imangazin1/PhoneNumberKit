@@ -2,6 +2,17 @@
 
 import UIKit
 
+public struct Configuration {
+    public var title: String = ""
+    public var searchPlaceholder: String = ""
+    public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
+    public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
+    public var labelColor: UIColor = UIColor.black
+    public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
+    public var detailColor: UIColor = UIColor.lightGray
+    public var closeButton: UIImage?
+}
+
 @available(iOS 11.0, *)
 public protocol CountryCodePickerDelegate: AnyObject {
     func countryCodePickerViewControllerDidPickCountry(_ country: CountryCodePickerViewController.Country)
@@ -19,15 +30,6 @@ public class CountryCodePickerViewController: UITableViewController {
 
         return searchController
     }()
-    
-    public struct Configuration {
-        public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
-        public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
-        public var labelColor: UIColor = UIColor.black
-        public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
-        public var detailColor: UIColor = UIColor.lightGray
-        public var closeButton: UIImage?
-    }
     
     public var configuration = Configuration() {
         didSet {
@@ -120,6 +122,8 @@ public class CountryCodePickerViewController: UITableViewController {
 
         UINavigationBar.appearance().tintColor = .black
         UIBarButtonItem.appearance().tintColor = UIColor.black
+        navigationItem.title = configuration.title
+        navigationItem.searchController?.searchBar.placeholder = configuration.searchPlaceholder
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
