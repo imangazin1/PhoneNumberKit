@@ -2,17 +2,6 @@
 
 import UIKit
 
-public struct Configuration {
-    public var title: String = ""
-    public var searchPlaceholder: String = ""
-    public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
-    public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
-    public var labelColor: UIColor = UIColor.black
-    public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
-    public var detailColor: UIColor = UIColor.lightGray
-    public var closeButton: UIImage?
-}
-
 @available(iOS 11.0, *)
 public protocol CountryCodePickerDelegate: AnyObject {
     func countryCodePickerViewControllerDidPickCountry(_ country: CountryCodePickerViewController.Country)
@@ -31,7 +20,7 @@ public class CountryCodePickerViewController: UITableViewController {
         return searchController
     }()
     
-    public var configuration = Configuration() {
+    public var configuration: TextFieldConfiguration? {
         didSet {
             if isViewLoaded {
                 tableView.reloadData()
@@ -87,7 +76,7 @@ public class CountryCodePickerViewController: UITableViewController {
 
     public weak var delegate: CountryCodePickerDelegate?
 
-    lazy var cancelButton = UIKit.UIBarButtonItem(image: configuration.closeButton, style: .plain, target: self, action: #selector(dismissAnimated))
+    lazy var cancelButton = UIKit.UIBarButtonItem(image: configuration?.closeButton, style: .plain, target: self, action: #selector(dismissAnimated))
     /**
      Init with a phone number kit instance. Because a PhoneNumberKit initialization is expensive you can must pass a pre-initialized instance to avoid incurring perf penalties.
 
@@ -122,8 +111,8 @@ public class CountryCodePickerViewController: UITableViewController {
 
         UINavigationBar.appearance().tintColor = .black
         UIBarButtonItem.appearance().tintColor = UIColor.black
-        navigationItem.title = configuration.title
-        navigationItem.searchController?.searchBar.placeholder = configuration.searchPlaceholder
+        navigationItem.title = configuration?.title
+        navigationItem.searchController?.searchBar.placeholder = configuration?.searchPlaceholder
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
@@ -156,15 +145,15 @@ public class CountryCodePickerViewController: UITableViewController {
     
     func setUpCellProperties(cell: CountryCell) {
         
-        cell.nameLabel.font = configuration.labelFont
+        cell.nameLabel.font = configuration?.labelFont
         if #available(iOS 13.0, *) {
             cell.nameLabel.textColor = UIColor.label
         } else {
             // Fallback on earlier versions
-            cell.nameLabel.textColor = configuration.labelColor
+            cell.nameLabel.textColor = configuration?.labelColor
         }
-        cell.diallingCodeLabel.font = configuration.detailFont
-        cell.diallingCodeLabel.textColor = configuration.detailColor
+        cell.diallingCodeLabel.font = configuration?.detailFont
+        cell.diallingCodeLabel.textColor = configuration?.detailColor
 
     }
 
