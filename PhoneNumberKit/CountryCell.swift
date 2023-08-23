@@ -48,9 +48,9 @@ class CountryCell: UITableViewCell {
 
     let flagImageView: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 32)
+        label.font = .systemFont(ofSize: 28)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        label.widthAnchor.constraint(equalToConstant: 32).isActive = true
         label.heightAnchor.constraint(equalToConstant: 24).isActive = true
         return label
     }()

@@ -403,7 +403,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
             self.flagButton.accessibilityHint = String(format: selectedFormat, countryName)
         }
         
-        self.flagButton.titleLabel?.font = UIFont.systemFont(ofSize: 32)
+        self.flagButton.titleLabel?.font = UIFont.systemFont(ofSize: 28)
     }
 
     open func updatePlaceholder() {
