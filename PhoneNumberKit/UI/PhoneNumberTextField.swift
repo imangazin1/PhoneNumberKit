@@ -187,7 +187,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         return mutableSet
     }()
     
-    override var bounds: CGRect {
+    open override var bounds: CGRect {
         didSet {
             setupFrames()
         }
