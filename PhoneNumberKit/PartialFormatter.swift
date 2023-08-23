@@ -80,10 +80,10 @@ public final class PartialFormatter {
     public var currentRegion: String {
         if ignoreIntlNumbers, currentMetadata?.codeID == "001" {
             return defaultRegion
+        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) == 7 {
+            return defaultRegion == "KZ" ? "KZ" : currentMetadata?.codeID ?? "KZ"
         } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 1 {
             return currentMetadata?.codeID ?? "US"
-        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 7 {
-            return currentMetadata?.codeID ?? "KZ"
         } else {
             return self.currentMetadata?.countryCode == 1
                 ? self.defaultRegion

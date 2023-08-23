@@ -327,9 +327,19 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         self.keyboardType = .phonePad
         addSubview(self.titleLabel)
         addSubview(self.bottomLineView)
-        self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
-        self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
+        setupConstraints()
         super.delegate = self
+    }
+    
+    func setupConstraints() {
+        titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        
+        bottomLineView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1).isActive = true
+        bottomLineView.widthAnchor.constraint(equalToConstant: frame.width).isActive = true
+        bottomLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
 
     func internationalPrefix(for countryCode: String) -> String? {
