@@ -366,7 +366,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         
         if let currentLeftView = self.leftView {
             var newFrame = currentLeftView.frame
-            newFrame.origin.y = 16
+            newFrame.origin.y = 30
             currentLeftView.frame = newFrame
             flagButton.frame = newFrame
         }
