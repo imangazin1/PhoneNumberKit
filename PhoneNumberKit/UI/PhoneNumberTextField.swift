@@ -361,7 +361,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     
     func setupFrames() {
         self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
-        self.flagButton.frame = .init(x: 0, y: 26, width: 24, height: 24)
+        self.flagButton.frame = .init(x: 0, y: 27, width: 24, height: 24)
         self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
 
@@ -402,8 +402,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
                 comment: "Accessiblity hint for currently selected country code")
             self.flagButton.accessibilityHint = String(format: selectedFormat, countryName)
         }
-        let fontSize = (font ?? UIFont.preferredFont(forTextStyle: .body)).pointSize
-        self.flagButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
+        
+        self.flagButton.titleLabel?.font = UIFont.systemFont(ofSize: 24)
     }
 
     open func updatePlaceholder() {
