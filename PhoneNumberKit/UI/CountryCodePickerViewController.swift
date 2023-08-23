@@ -27,7 +27,8 @@ public class CountryCodePickerViewController: UITableViewController {
             }
         }
     }
-
+    
+    public var selectedRegion: String?
     public let phoneNumberKit: PhoneNumberKit
 
     let commonCountryCodes: [String]
@@ -62,7 +63,7 @@ public class CountryCodePickerViewController: UITableViewController {
 
         var result: [[Country]] = []
         // Note we should maybe use the user's current carrier's country code?
-        if hasCurrent, let current = Country(for: PhoneNumberKit.defaultRegionCode(), with: phoneNumberKit) {
+        if hasCurrent, let selectedRegion = selectedRegion, let current = Country(for: selectedRegion, with: phoneNumberKit) {
             result.append([current])
         }
         hasCommon = hasCommon && !popular.isEmpty
@@ -111,8 +112,8 @@ public class CountryCodePickerViewController: UITableViewController {
 
         UINavigationBar.appearance().tintColor = .black
         UIBarButtonItem.appearance().tintColor = UIColor.black
-        navigationItem.title = configuration?.title
-        navigationItem.searchController?.searchBar.placeholder = configuration?.searchPlaceholder
+        title = configuration?.title
+        searchController.searchBar.placeholder = configuration?.searchPlaceholder
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
@@ -178,7 +179,7 @@ public class CountryCodePickerViewController: UITableViewController {
         if isFiltering {
             return nil
         } else if section == 0, hasCurrent {
-            return NSLocalizedString("PhoneNumberKit.CountryCodePicker.Current", value: "Current", comment: "Name of \"Current\" section")
+            return ""
         } else if section == 0, !hasCurrent, hasCommon {
             return NSLocalizedString("PhoneNumberKit.CountryCodePicker.Common", value: "Common", comment: "Name of \"Common\" section")
         } else if section == 1, hasCurrent, hasCommon {

@@ -46,14 +46,6 @@ class CountryCell: UITableViewCell {
         return label
     }()
 
-    let separatorLineView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .gray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        return view
-    }()
-
     let flagImageView: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -116,18 +108,12 @@ extension CountryCell {
         countryContentStackView.addArrangedSubview(countryCheckStackView)
         
         contentView.addSubview(countryContentStackView)
-        contentView.addSubview(separatorLineView)
         
         // Configure constraints on country content stack
         countryContentStackView.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
         countryContentStackView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
         countryContentStackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 4).isActive = true
-        countryContentStackView.bottomAnchor.constraint(equalTo: separatorLineView.topAnchor, constant: -4).isActive = true
-        
-        // Configure constraints on separator view
-        separatorLineView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        separatorLineView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        separatorLineView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        countryContentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4).isActive = true
     }
     
     
