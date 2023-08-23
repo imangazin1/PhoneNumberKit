@@ -38,7 +38,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     public let phoneNumberKit: PhoneNumberKit
 
     public lazy var titleLabel = UILabel()
-    public lazy var flagButton = UIButton(frame: .init(x: 0, y: 16, width: 24, height: 24))
+    public lazy var flagButton = UIButton()
     public lazy var bottomLineView = UIView()
 
     /// Override setText so number will be automatically formatted when setting text by code
@@ -266,11 +266,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         if self.withFlag { // update the width of the flagButton automatically, iOS <13 doesn't handle this for you
             let width = self.flagButton.systemLayoutSizeFitting(bounds.size).width
             self.flagButton.frame.size.width = width
-            if let currentLeftView = self.leftView {
-                var frame = currentLeftView.frame
-                frame.origin.y = 16
-                currentLeftView.frame = frame
-            }
         }
         super.layoutSubviews()
     }
@@ -368,6 +363,13 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     func setupFrames() {
         self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
         self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
+        
+        if let currentLeftView = self.leftView {
+            var newFrame = currentLeftView.frame
+            newFrame.origin.y = 16
+            currentLeftView.frame = newFrame
+            flagButton.frame = newFrame
+        }
     }
 
     func internationalPrefix(for countryCode: String) -> String? {

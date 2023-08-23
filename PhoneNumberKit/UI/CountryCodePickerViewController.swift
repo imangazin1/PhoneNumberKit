@@ -201,6 +201,10 @@ public class CountryCodePickerViewController: UITableViewController {
         }
         return countries[section].first?.name.first.map(String.init)
     }
+    
+    public override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 56
+    }
 
     public override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         guard !isFiltering else {

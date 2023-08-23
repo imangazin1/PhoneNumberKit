@@ -112,8 +112,8 @@ extension CountryCell {
         // Configure constraints on country content stack
         countryContentStackView.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 15).isActive = true
         countryContentStackView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -30).isActive = true
-        countryContentStackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 4).isActive = true
-        countryContentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4).isActive = true
+        countryContentStackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        countryContentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
     }
     
     
