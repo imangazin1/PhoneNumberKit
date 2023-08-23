@@ -48,6 +48,7 @@ class CountryCell: UITableViewCell {
 
     let flagImageView: UILabel = {
         let label = UILabel()
+        label.font = .systemFont(ofSize: 32)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.widthAnchor.constraint(equalToConstant: 24).isActive = true
         label.heightAnchor.constraint(equalToConstant: 24).isActive = true
@@ -115,43 +116,6 @@ extension CountryCell {
         countryContentStackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
         countryContentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
     }
-    
-    
-    /// Apply some styling on flag image view
-    ///
-    /// - Note: By default, `CountryFlagStyle.nromal` style is applied on the flag image view.
-    ///
-    /// - Parameter style: Flag style kind
-    
-    func applyFlagStyle(_ style: CountryFlagStyle) {
-        
-        // Cleae all constraints from flag image view
-        NSLayoutConstraint.deactivate(flagImageView.constraints)
-        layoutIfNeeded()
-        
-        switch style {
-        case .corner:
-            // Corner style
-            flagImageView.widthAnchor.constraint(equalToConstant: 24).isActive = true
-            flagImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
-            flagImageView.layer.cornerRadius = 4
-            flagImageView.clipsToBounds = true
-            flagImageView.contentMode = .scaleAspectFit
-        case .circular:
-            // Circular style
-            flagImageView.widthAnchor.constraint(equalToConstant: 34).isActive = true
-            flagImageView.heightAnchor.constraint(equalToConstant: 34).isActive = true
-            flagImageView.layer.cornerRadius = 34 / 2
-            flagImageView.clipsToBounds = true
-            flagImageView.contentMode = .scaleAspectFit
-        default:
-            // Apply default styling
-            flagImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            flagImageView.heightAnchor.constraint(equalToConstant: 26).isActive = true
-            flagImageView.contentMode = .scaleAspectFit
-        }
-    }
-    
     
     /// Hides dialing code label
     ///
