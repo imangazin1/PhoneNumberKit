@@ -11,6 +11,17 @@
 import Foundation
 import UIKit
 
+public struct TextFieldConfiguration {
+    public var title: String = ""
+    public var searchPlaceholder: String = ""
+    public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
+    public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
+    public var labelColor: UIColor = UIColor.black
+    public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
+    public var detailColor: UIColor = UIColor.lightGray
+    public var closeButton: UIImage?
+}
+
 /// Custom text field that formats phone numbers
 open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     public let phoneNumberKit: PhoneNumberKit
@@ -40,7 +51,9 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     open func setTextUnformatted(newValue: String?) {
         super.text = newValue
     }
-
+    
+    let otherConfiguration = TextFieldConfiguration()
+   
     private lazy var _defaultRegion: String = PhoneNumberKit.defaultRegionCode()
 
     /// Override region to set a custom region. Automatically uses the default region code.
@@ -411,6 +424,14 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         guard withDefaultPickerUI else { return }
         let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit)
         vc.delegate = self
+        vc.configuration = Configuration(title: otherConfiguration.title,
+                                         searchPlaceholder: otherConfiguration.searchPlaceholder,
+                                         flagStyle: otherConfiguration.flagStyle,
+                                         labelFont: otherConfiguration.labelFont,
+                                         labelColor: otherConfiguration.labelColor,
+                                         detailFont: otherConfiguration.detailFont,
+                                         detailColor: otherConfiguration.detailColor,
+                                         closeButton: otherConfiguration.closeButton)
         let nav = UINavigationController(rootViewController: vc)
         if modalPresentationStyle != nil {
             nav.modalPresentationStyle = modalPresentationStyle!
