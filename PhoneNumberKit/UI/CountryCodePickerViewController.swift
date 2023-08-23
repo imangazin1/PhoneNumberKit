@@ -203,7 +203,7 @@ public class CountryCodePickerViewController: UITableViewController {
     }
     
     public override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 56
+        return 60
     }
 
     public override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
