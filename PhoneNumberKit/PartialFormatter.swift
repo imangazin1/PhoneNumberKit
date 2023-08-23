@@ -82,6 +82,8 @@ public final class PartialFormatter {
             return defaultRegion
         } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 1 {
             return currentMetadata?.codeID ?? "US"
+        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 7 {
+            return currentMetadata?.codeID ?? "KZ"
         } else {
             return self.currentMetadata?.countryCode == 1
                 ? self.defaultRegion

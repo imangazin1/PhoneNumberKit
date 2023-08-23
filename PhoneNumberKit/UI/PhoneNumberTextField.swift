@@ -15,7 +15,9 @@ import UIKit
 open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     public let phoneNumberKit: PhoneNumberKit
 
+    public lazy var titleLabel = UILabel()
     public lazy var flagButton = UIButton()
+    public lazy var bottomLineView = UIView()
 
     /// Override setText so number will be automatically formatted when setting text by code
     open override var text: String? {
@@ -90,6 +92,33 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
             }
         }
     }
+    
+    public var title: String? {
+        didSet {
+            titleLabel.text = title
+        }
+    }
+    
+    public var titleFont: UIFont? {
+        didSet {
+            titleLabel.font = titleFont
+        }
+    }
+    
+    public var titleColor: UIColor? {
+        didSet {
+            titleLabel.textColor = titleColor
+        }
+    }
+    
+    public var lineColor: UIColor? {
+        didSet {
+            bottomLineView.backgroundColor = lineColor
+        }
+    }
+    
+    public var selectedTitleColor: UIColor?
+    public var selectedLineColor: UIColor?
 
     #if compiler(>=5.1)
     /// Available on iOS 13 and above just.
@@ -296,6 +325,10 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     func setup() {
         self.autocorrectionType = .no
         self.keyboardType = .phonePad
+        addSubview(self.titleLabel)
+        addSubview(self.bottomLineView)
+        self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
+        self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
         super.delegate = self
     }
 
@@ -369,15 +402,11 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         guard withDefaultPickerUI else { return }
         let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit)
         vc.delegate = self
-        if let nav = containingViewController?.navigationController, !PhoneNumberKit.CountryCodePicker.forceModalPresentation {
-            nav.pushViewController(vc, animated: true)
-        } else {
-            let nav = UINavigationController(rootViewController: vc)
-            if modalPresentationStyle != nil {
-                nav.modalPresentationStyle = modalPresentationStyle!
-            }
-            containingViewController?.present(nav, animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        if modalPresentationStyle != nil {
+            nav.modalPresentationStyle = modalPresentationStyle!
         }
+        containingViewController?.present(nav, animated: true)
     }
 
     /// containingViewController looks at the responder chain to find the view controller nearest to itself
@@ -512,6 +541,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.titleLabel.textColor = titleColor
+        self.bottomLineView.backgroundColor = lineColor
         if self.withExamplePlaceholder, self.withPrefix, let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description, (text ?? "").isEmpty {
             text = "+" + countryCode + " "
         }
@@ -523,6 +554,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textFieldDidEndEditing(_ textField: UITextField) {
+        self.titleLabel.textColor = selectedTitleColor
+        self.bottomLineView.backgroundColor = selectedLineColor
         updateTextFieldDidEndEditing(textField)
         self._delegate?.textFieldDidEndEditing?(textField)
     }
@@ -574,11 +607,7 @@ extension PhoneNumberTextField: CountryCodePickerDelegate {
         updateFlag()
         updatePlaceholder()
 
-        if let nav = containingViewController?.navigationController, !PhoneNumberKit.CountryCodePicker.forceModalPresentation {
-            nav.popViewController(animated: true)
-        } else {
-            containingViewController?.dismiss(animated: true)
-        }
+        containingViewController?.dismiss(animated: true)
     }
 }
 
