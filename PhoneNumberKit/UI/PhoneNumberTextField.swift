@@ -437,6 +437,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit)
         vc.delegate = self
         vc.configuration = configuration
+        vc.selectedRegion = defaultRegion
         let nav = UINavigationController(rootViewController: vc)
         if modalPresentationStyle != nil {
             nav.modalPresentationStyle = modalPresentationStyle!
