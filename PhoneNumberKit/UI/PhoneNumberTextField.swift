@@ -361,7 +361,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     
     func setupFrames() {
         self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
-        self.flagButton.frame = .init(x: 0, y: 20, width: 24, height: 24)
+        self.flagButton.frame = .init(x: 0, y: 30, width: 24, height: 24)
         self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
 
