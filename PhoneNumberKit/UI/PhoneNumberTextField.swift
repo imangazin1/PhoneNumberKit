@@ -12,8 +12,6 @@ import Foundation
 import UIKit
 
 public struct TextFieldConfiguration {
-    public var title: String = ""
-    public var searchPlaceholder: String = ""
     public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
     public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
     public var labelColor: UIColor = UIColor.black
@@ -21,9 +19,7 @@ public struct TextFieldConfiguration {
     public var detailColor: UIColor = UIColor.lightGray
     public var closeButton: UIImage?
     
-    public init(title: String, searchPlaceholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil) {
-        self.title = title
-        self.searchPlaceholder = searchPlaceholder
+    public init(flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil) {
         self.flagStyle = flagStyle
         self.labelFont = labelFont
         self.labelColor = labelColor
@@ -434,10 +430,9 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     @available(iOS 11.0, *)
     @objc func didPressFlagButton() {
         guard withDefaultPickerUI else { return }
-        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit)
+        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, selectedRegion: defaultRegion)
         vc.delegate = self
         vc.configuration = configuration
-        vc.selectedRegion = defaultRegion
         let nav = UINavigationController(rootViewController: vc)
         if modalPresentationStyle != nil {
             nav.modalPresentationStyle = modalPresentationStyle!

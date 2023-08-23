@@ -14,7 +14,7 @@ public class CountryCodePickerViewController: UITableViewController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = NSLocalizedString(
             "PhoneNumberKit.CountryCodePicker.SearchBarPlaceholder",
-            value: "Search Country Codes",
+            value: "Country",
             comment: "Placeholder for country code search field")
 
         return searchController
@@ -28,9 +28,11 @@ public class CountryCodePickerViewController: UITableViewController {
         }
     }
     
-    public var selectedRegion: String?
     public let phoneNumberKit: PhoneNumberKit
 
+    let titleText: String
+    let placeholder: String
+    let selectedRegion: String
     let commonCountryCodes: [String]
 
     var shouldRestoreNavigationBarToHidden = false
@@ -63,7 +65,7 @@ public class CountryCodePickerViewController: UITableViewController {
 
         var result: [[Country]] = []
         // Note we should maybe use the user's current carrier's country code?
-        if hasCurrent, let selectedRegion = selectedRegion, let current = Country(for: selectedRegion, with: phoneNumberKit) {
+        if hasCurrent, let current = Country(for: selectedRegion, with: phoneNumberKit) {
             result.append([current])
         }
         hasCommon = hasCommon && !popular.isEmpty
@@ -86,34 +88,45 @@ public class CountryCodePickerViewController: UITableViewController {
      */
     public init(
         phoneNumberKit: PhoneNumberKit,
+        titleText: String,
+        placeholder: String,
+        selectedRegion: String,
         commonCountryCodes: [String] = PhoneNumberKit.CountryCodePicker.commonCountryCodes)
     {
         self.phoneNumberKit = phoneNumberKit
+        self.titleText = titleText
+        self.placeholder = placeholder
+        self.selectedRegion = selectedRegion
         self.commonCountryCodes = commonCountryCodes
-        super.init(style: .grouped)
+        super.init(style: .plain)
         self.commonInit()
         
     }
 
     required init?(coder aDecoder: NSCoder) {
         self.phoneNumberKit = PhoneNumberKit()
+        self.titleText = "Сode of the country"
+        self.placeholder = "Country"
+        self.selectedRegion = "KZ"
         self.commonCountryCodes = PhoneNumberKit.CountryCodePicker.commonCountryCodes
         super.init(coder: aDecoder)
         self.commonInit()
     }
 
     func commonInit() {
-        self.title = NSLocalizedString("PhoneNumberKit.CountryCodePicker.Title", value: "Choose your country", comment: "Title of CountryCodePicker ViewController")
+        self.title = NSLocalizedString("PhoneNumberKit.CountryCodePicker.Title", value: titleText, comment: "Title of CountryCodePicker ViewController")
 
         tableView.register(CountryCell.self, forCellReuseIdentifier: CountryCell.reuseIdentifier)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.backgroundColor = .clear
+        searchController.searchBar.placeholder = NSLocalizedString(
+            "PhoneNumberKit.CountryCodePicker.SearchBarPlaceholder",
+            value: placeholder,
+            comment: "Placeholder for country code search field")
 
         UINavigationBar.appearance().tintColor = .black
         UIBarButtonItem.appearance().tintColor = UIColor.black
-        title = configuration?.title
-        searchController.searchBar.placeholder = configuration?.searchPlaceholder
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
