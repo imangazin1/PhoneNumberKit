@@ -92,6 +92,8 @@
 		D51A60AB2744160B0021EE7E /* PhoneNumber+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51A60A8274416050021EE7E /* PhoneNumber+Codable.swift */; };
 		D51A60AC2744160C0021EE7E /* PhoneNumber+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51A60A8274416050021EE7E /* PhoneNumber+Codable.swift */; };
 		D51A60AE27442EF50021EE7E /* PhoneNumber+CodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51A60AD27442EF50021EE7E /* PhoneNumber+CodableTests.swift */; };
+		FF165EB12A966B4F004EE23C /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF165EB02A966B4F004EE23C /* CountryCell.swift */; };
+		FF165EB32A966BE1004EE23C /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF165EB22A966BE1004EE23C /* Country.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +141,8 @@
 		C9D81F812348025700B75AB7 /* PhoneNumberTextFieldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTextFieldTests.swift; sourceTree = "<group>"; };
 		D51A60A8274416050021EE7E /* PhoneNumber+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneNumber+Codable.swift"; sourceTree = "<group>"; };
 		D51A60AD27442EF50021EE7E /* PhoneNumber+CodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhoneNumber+CodableTests.swift"; sourceTree = "<group>"; };
+		FF165EB02A966B4F004EE23C /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
+		FF165EB22A966BE1004EE23C /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +250,8 @@
 				11C2EF381D62BC3200052D44 /* NSRegularExpression+Swift.swift */,
 				3435CC8F1BBFF66F003F953B /* Resources */,
 				3420981B1BE1F1250036BBB1 /* Frameworks */,
+				FF165EB02A966B4F004EE23C /* CountryCell.swift */,
+				FF165EB22A966BE1004EE23C /* Country.swift */,
 			);
 			path = PhoneNumberKit;
 			sourceTree = "<group>";
@@ -508,7 +514,9 @@
 				3420CF5E1BE8959F00FAE34F /* Formatter.swift in Sources */,
 				343B850D1C62A25600918E46 /* PhoneNumberTextField.swift in Sources */,
 				5D14267D238F5842002DD197 /* CountryCodePickerViewController.swift in Sources */,
+				FF165EB32A966BE1004EE23C /* Country.swift in Sources */,
 				3417BD6B2210AC4900477EE7 /* MetadataParsing.swift in Sources */,
+				FF165EB12A966B4F004EE23C /* CountryCell.swift in Sources */,
 				346922691BC023A60023482F /* PhoneNumberKit.swift in Sources */,
 				343B850C1C62A25600918E46 /* PartialFormatter.swift in Sources */,
 				D51A60A9274416050021EE7E /* PhoneNumber+Codable.swift in Sources */,
