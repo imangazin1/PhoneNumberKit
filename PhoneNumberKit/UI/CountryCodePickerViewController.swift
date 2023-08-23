@@ -19,6 +19,23 @@ public class CountryCodePickerViewController: UITableViewController {
 
         return searchController
     }()
+    
+    public struct Configuration {
+        public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
+        public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
+        public var labelColor: UIColor = UIColor.black
+        public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
+        public var detailColor: UIColor = UIColor.lightGray
+        public var closeButton: UIImage?
+    }
+    
+    public var configuration = Configuration() {
+        didSet {
+            if isViewLoaded {
+                tableView.reloadData()
+            }
+        }
+    }
 
     public let phoneNumberKit: PhoneNumberKit
 
@@ -68,8 +85,7 @@ public class CountryCodePickerViewController: UITableViewController {
 
     public weak var delegate: CountryCodePickerDelegate?
 
-    lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(dismissAnimated))
-
+    lazy var cancelButton = UIKit.UIBarButtonItem(image: configuration.closeButton, style: .plain, target: self, action: #selector(dismissAnimated))
     /**
      Init with a phone number kit instance. Because a PhoneNumberKit initialization is expensive you can must pass a pre-initialized instance to avoid incurring perf penalties.
 
@@ -84,6 +100,7 @@ public class CountryCodePickerViewController: UITableViewController {
         self.commonCountryCodes = commonCountryCodes
         super.init(style: .grouped)
         self.commonInit()
+        
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -101,6 +118,8 @@ public class CountryCodePickerViewController: UITableViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.backgroundColor = .clear
 
+        UINavigationBar.appearance().tintColor = .black
+        UIBarButtonItem.appearance().tintColor = UIColor.black
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
@@ -130,6 +149,20 @@ public class CountryCodePickerViewController: UITableViewController {
     func country(for indexPath: IndexPath) -> Country {
         isFiltering ? filteredCountries[indexPath.row] : countries[indexPath.section][indexPath.row]
     }
+    
+    func setUpCellProperties(cell: CountryCell) {
+        
+        cell.nameLabel.font = configuration.labelFont
+        if #available(iOS 13.0, *) {
+            cell.nameLabel.textColor = UIColor.label
+        } else {
+            // Fallback on earlier versions
+            cell.nameLabel.textColor = configuration.labelColor
+        }
+        cell.diallingCodeLabel.font = configuration.detailFont
+        cell.diallingCodeLabel.textColor = configuration.detailColor
+
+    }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
         isFiltering ? 1 : countries.count
@@ -140,15 +173,11 @@ public class CountryCodePickerViewController: UITableViewController {
     }
 
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Cell.reuseIdentifier, for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CountryCell.reuseIdentifier) as? CountryCell else { fatalError("Cell with Identifier CountryTableViewCell cann't dequed") }
         let country = self.country(for: indexPath)
 
-        cell.textLabel?.text = country.prefix + " " + country.flag
-        cell.detailTextLabel?.text = country.name
-
-        cell.textLabel?.font = .preferredFont(forTextStyle: .callout)
-        cell.detailTextLabel?.font = .preferredFont(forTextStyle: .body)
-
+        cell.configureCell(country: country)
+        setUpCellProperties(cell: cell)
         return cell
     }
 
