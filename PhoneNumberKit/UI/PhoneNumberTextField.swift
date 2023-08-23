@@ -12,6 +12,8 @@ import Foundation
 import UIKit
 
 public struct TextFieldConfiguration {
+    public var titleText: String = ""
+    public var placeholder: String = ""
     public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
     public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
     public var labelColor: UIColor = UIColor.black
@@ -19,7 +21,9 @@ public struct TextFieldConfiguration {
     public var detailColor: UIColor = UIColor.lightGray
     public var closeButton: UIImage?
     
-    public init(flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil) {
+    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil) {
+        self.titleText = titleText
+        self.placeholder = placeholder
         self.flagStyle = flagStyle
         self.labelFont = labelFont
         self.labelColor = labelColor
@@ -358,7 +362,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     
     func setupFrames() {
         self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
-        self.flagButton.frame = .init(x: 0, y: 12, width: 24, height: 24)
+        self.flagButton.frame = .init(x: 0, y: 28, width: 24, height: 24)
         self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
 
@@ -430,7 +434,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     @available(iOS 11.0, *)
     @objc func didPressFlagButton() {
         guard withDefaultPickerUI else { return }
-        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, selectedRegion: defaultRegion)
+        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, titleText: configuration?.titleText ?? "", placeholder: configuration?.placeholder ?? "", selectedRegion: defaultRegion)
         vc.delegate = self
         vc.configuration = configuration
         let nav = UINavigationController(rootViewController: vc)
