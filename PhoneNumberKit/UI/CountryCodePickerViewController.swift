@@ -116,6 +116,7 @@ public class CountryCodePickerViewController: UITableViewController {
     func commonInit() {
         self.title = NSLocalizedString("PhoneNumberKit.CountryCodePicker.Title", value: titleText, comment: "Title of CountryCodePicker ViewController")
 
+        tableView.separatorStyle = .none
         tableView.register(CountryCell.self, forCellReuseIdentifier: CountryCell.reuseIdentifier)
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
