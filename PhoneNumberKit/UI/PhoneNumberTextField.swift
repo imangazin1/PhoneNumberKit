@@ -532,6 +532,10 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         let textAsNSString = text as NSString
         let changedRange = textAsNSString.substring(with: range) as NSString
         let modifiedTextField = textAsNSString.replacingCharacters(in: range, with: string)
+        
+        if internationalPrefix(for: currentRegion)?.count ?? 0 < modifiedTextField.count {
+            return false
+        }
 
         let filteredCharacters = modifiedTextField.filter {
             String($0).rangeOfCharacter(from: (textField as! PhoneNumberTextField).nonNumericSet) == nil
@@ -575,8 +579,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.titleLabel.textColor = titleColor
-        self.bottomLineView.backgroundColor = lineColor
+        titleLabel.textColor = selectedTitleColor
+        bottomLineView.backgroundColor = selectedLineColor
         if self.withExamplePlaceholder, self.withPrefix, let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description, (text ?? "").isEmpty {
             text = "+" + countryCode + " "
         }
@@ -588,14 +592,14 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textFieldDidEndEditing(_ textField: UITextField) {
-        self.titleLabel.textColor = selectedTitleColor
-        self.bottomLineView.backgroundColor = selectedLineColor
         updateTextFieldDidEndEditing(textField)
         self._delegate?.textFieldDidEndEditing?(textField)
     }
 
     @available (iOS 10.0, tvOS 10.0, *)
     open func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        titleLabel.textColor = titleColor
+        bottomLineView.backgroundColor = lineColor
         updateTextFieldDidEndEditing(textField)
         if let _delegate = _delegate {
             if (_delegate.responds(to: #selector(textFieldDidEndEditing(_:reason:)))) {
