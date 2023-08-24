@@ -533,7 +533,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         let changedRange = textAsNSString.substring(with: range) as NSString
         let modifiedTextField = textAsNSString.replacingCharacters(in: range, with: string)
         
-        if internationalPrefix(for: currentRegion)?.count ?? 0 < modifiedTextField.count {
+        if modifiedTextField.count < internationalPrefix(for: currentRegion)?.count ?? 0 {
             return false
         }
 
