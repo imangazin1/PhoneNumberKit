@@ -40,6 +40,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     public lazy var titleLabel = UILabel()
     public lazy var flagButton = UIButton()
     public lazy var bottomLineView = UIView()
+    
+    public var didTapFlag: (() -> Void)?
 
     /// Override setText so number will be automatically formatted when setting text by code
     open override var text: String? {
@@ -441,6 +443,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
             nav.modalPresentationStyle = modalPresentationStyle!
         }
         containingViewController?.present(nav, animated: true)
+        didTapFlag?()
     }
 
     /// containingViewController looks at the responder chain to find the view controller nearest to itself

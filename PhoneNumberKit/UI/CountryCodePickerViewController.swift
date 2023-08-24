@@ -138,8 +138,7 @@ public class CountryCodePickerViewController: UITableViewController {
         super.viewWillAppear(animated)
         if let nav = navigationController {
             shouldRestoreNavigationBarToHidden = nav.isNavigationBarHidden
-            let navigationBarCount = nav.navigationBar.subviews.count
-            nav.setNavigationBarHidden(navigationBarCount > 1, animated: true)
+            nav.setNavigationBarHidden(false, animated: true)
         }
         if let nav = navigationController, nav.isBeingPresented && nav.viewControllers.count == 1 {
             navigationItem.setRightBarButton(cancelButton, animated: true)
