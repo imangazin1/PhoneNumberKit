@@ -16,6 +16,7 @@ public final class PartialFormatter {
     weak var metadataManager: MetadataManager?
     weak var parser: PhoneNumberParser?
     weak var regexManager: RegexManager?
+    private var _currentRegion: String?
 
     public convenience init(phoneNumberKit: PhoneNumberKit = PhoneNumberKit(),
                             defaultRegion: String = PhoneNumberKit.defaultRegionCode(),
@@ -78,18 +79,36 @@ public final class PartialFormatter {
     // MARK: Status
 
     public var currentRegion: String {
-        if ignoreIntlNumbers, currentMetadata?.codeID == "001" {
-            return defaultRegion
-        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) == 7 {
-            return defaultRegion == "KZ" ? "KZ" : currentMetadata?.codeID ?? "KZ"
-        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 1 {
-            return currentMetadata?.codeID ?? "US"
-        } else {
-            return self.currentMetadata?.countryCode == 1
-                ? self.defaultRegion
-                : self.currentMetadata?.codeID ?? self.defaultRegion
+        get {
+            if ignoreIntlNumbers, currentMetadata?.codeID == "001" {
+                return defaultRegion
+            } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) == 7 {
+                return defaultRegion == "KZ" ? "KZ" : currentMetadata?.codeID ?? "KZ"
+            } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 1 {
+                return currentMetadata?.codeID ?? "US"
+            } else {
+                return self.currentMetadata?.countryCode == 1
+                    ? self.defaultRegion
+                    : self.currentMetadata?.codeID ?? self.defaultRegion
+            }
+        }
+        set {
+            self._currentRegion = newValue
         }
     }
+//    public var currentRegion: String {
+//        if ignoreIntlNumbers, currentMetadata?.codeID == "001" {
+//            return defaultRegion
+//        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) == 7 {
+//            return defaultRegion == "KZ" ? "KZ" : currentMetadata?.codeID ?? "KZ"
+//        } else if self.phoneNumberKit.countryCode(for: self.defaultRegion) != 1 {
+//            return currentMetadata?.codeID ?? "US"
+//        } else {
+//            return self.currentMetadata?.countryCode == 1
+//                ? self.defaultRegion
+//                : self.currentMetadata?.codeID ?? self.defaultRegion
+//        }
+//    }
 
     public func nationalNumber(from rawNumber: String) -> String {
         guard let parser = parser else { return rawNumber }
