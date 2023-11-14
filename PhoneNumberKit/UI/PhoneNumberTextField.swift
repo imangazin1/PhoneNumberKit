@@ -231,7 +231,12 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     // MARK: Status
 
     public var currentRegion: String {
-        return self.partialFormatter.currentRegion
+        get {
+            return self.partialFormatter.currentRegion
+        }
+        set {
+            self.partialFormatter.currentRegion = newValue
+        }
     }
 
     public var nationalNumber: String {
