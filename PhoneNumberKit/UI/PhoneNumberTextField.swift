@@ -391,22 +391,45 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     func setup() {
+        stylizeViews()
         self.autocorrectionType = .no
         self.keyboardType = .phonePad
         
         addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        containerView.addSubview(flagButton)
+        flagButton.translatesAutoresizingMaskIntoConstraints = false
+        
         [titleLabel, containerView, errorStackView].forEach {
             stackView.addArrangedSubview($0)
         }
-        
-        containerView.addSubview(flagButton)
         
         [errorTextFieldLabel].forEach {
             errorStackView.addArrangedSubview($0)
         }
         super.delegate = self
+    }
+    
+    func stylizeViews() {
+        clipsToBounds = false
+        addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        addTarget(self, action: #selector(textFieldDidEditing), for: .editingDidEnd)
+        
+        stackView.axis = .vertical
+        stackView.spacing = 4
+
+        containerView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(placeholderDidTapped))
+        )
+        titleLabel.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(placeholderDidTapped))
+        )
+        
+        errorStackView.isHidden = true
+        errorStackView.spacing = 4
+        errorStackView.alignment = .top
+        errorTextFieldLabel.numberOfLines = 0
     }
     
     func setupFrames() {
@@ -421,6 +444,21 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
         flagButton.widthAnchor.constraint(equalToConstant: 24).isActive = true
         flagButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+    }
+    
+    @objc func textFieldDidChange() {
+        hideError()
+    }
+    
+    @objc func textFieldDidEditing() {
+        titleLabel.textColor = titleColor
+        setBorder(false)
+    }
+    
+    @objc func placeholderDidTapped() {
+        titleLabel.textColor = selectedTitleColor
+        setBorder(true)
+        becomeFirstResponder()
     }
 
     func internationalPrefix(for countryCode: String) -> String? {
