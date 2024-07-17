@@ -413,7 +413,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     
     func stylizeViews() {
         clipsToBounds = false
-        addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addTarget(self, action: #selector(textFieldDidEditing), for: .editingDidEnd)
         
         stackView.axis = .vertical
@@ -444,10 +443,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
         flagButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         flagButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
-    }
-    
-    @objc func textFieldDidChange() {
-        hideError()
     }
     
     @objc func textFieldDidEditing() {
