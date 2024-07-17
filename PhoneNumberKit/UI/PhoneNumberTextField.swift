@@ -36,10 +36,13 @@ public struct TextFieldConfiguration {
 /// Custom text field that formats phone numbers
 open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     public let phoneNumberKit: PhoneNumberKit
-
+    
+    public lazy var stackView = UIStackView()
+    public lazy var containerView = UIView()
     public lazy var titleLabel = UILabel()
     public lazy var flagButton = UIButton()
-    public lazy var bottomLineView = UIView()
+    public lazy var errorStackView = UIStackView()
+    public lazy var errorTextFieldLabel = UILabel()
     
     public var didTapFlag: (() -> Void)?
 
@@ -135,14 +138,49 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         }
     }
     
-    public var lineColor: UIColor? {
+    public var containerBackground: UIColor? {
         didSet {
-            bottomLineView.backgroundColor = lineColor
+            containerView.backgroundColor = containerBackground
+        }
+    }
+    
+    public var containerCornerRadius: CGFloat? {
+        didSet {
+            containerView.layer.cornerRadius = containerCornerRadius ?? 0
+        }
+    }
+    
+    public var errorFont: UIFont? {
+        didSet {
+            errorTextFieldLabel.font = errorFont
         }
     }
     
     public var selectedTitleColor: UIColor?
-    public var selectedLineColor: UIColor?
+    public var selectedBorderColor: UIColor?
+    public var errorColor: UIColor?
+    
+    public func showError(message: String) {
+        titleLabel.textColor = errorColor
+        containerView.layer.borderWidth = 2
+        containerView.layer.borderColor = errorColor?.cgColor
+        errorStackView.isHidden = false
+        errorTextFieldLabel.text = message
+        errorTextFieldLabel.textColor = errorColor
+        errorStackView.layoutIfNeeded()
+    }
+    
+    public func hideError() {
+        titleLabel.textColor = selectedTitleColor
+        setBorder(true)
+        errorStackView.isHidden = true
+        errorTextFieldLabel.text = ""
+    }
+    
+    private func setBorder(_ isActive: Bool) {
+        containerView.layer.borderWidth = isActive ? 2 : 0
+        containerView.layer.borderColor = isActive ? selectedBorderColor?.cgColor : nil
+    }
 
     #if compiler(>=5.1)
     /// Available on iOS 13 and above just.
@@ -355,16 +393,34 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     func setup() {
         self.autocorrectionType = .no
         self.keyboardType = .phonePad
-        addSubview(self.titleLabel)
-        addSubview(self.flagButton)
-        addSubview(self.bottomLineView)
+        
+        addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        [titleLabel, containerView, errorStackView].forEach {
+            stackView.addArrangedSubview($0)
+        }
+        
+        containerView.addSubview(flagButton)
+        
+        [errorTextFieldLabel].forEach {
+            errorStackView.addArrangedSubview($0)
+        }
         super.delegate = self
     }
     
     func setupFrames() {
-        self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
-        self.flagButton.frame = .init(x: 0, y: 27, width: 24, height: 24)
-        self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
+        stackView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
+        
+        containerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        flagButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
+        flagButton.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        flagButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
     }
 
     func internationalPrefix(for countryCode: String) -> String? {
@@ -582,8 +638,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textFieldDidBeginEditing(_ textField: UITextField) {
+        setBorder(true)
         titleLabel.textColor = selectedTitleColor
-        bottomLineView.backgroundColor = selectedLineColor
         if self.withExamplePlaceholder, self.withPrefix, let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description, (text ?? "").isEmpty {
             text = "+" + countryCode + " "
         }
@@ -602,7 +658,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     @available (iOS 10.0, tvOS 10.0, *)
     open func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         titleLabel.textColor = titleColor
-        bottomLineView.backgroundColor = lineColor
+        setBorder(false)
         updateTextFieldDidEndEditing(textField)
         if let _delegate = _delegate {
             if (_delegate.responds(to: #selector(textFieldDidEndEditing(_:reason:)))) {
@@ -623,6 +679,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
 
     @available(iOS 13.0, tvOS 13.0, *)
     open func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.hideError()
         self._delegate?.textFieldDidChangeSelection?(textField)
     }
 
