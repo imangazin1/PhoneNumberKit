@@ -442,8 +442,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         
         flagButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
-        flagButton.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        flagButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        flagButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        flagButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
     }
     
     @objc func textFieldDidChange() {
