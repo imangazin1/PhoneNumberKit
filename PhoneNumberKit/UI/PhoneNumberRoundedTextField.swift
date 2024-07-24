@@ -440,7 +440,9 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
         
         containerView.heightAnchor.constraint(equalToConstant: 56).isActive = true
-        self.titleLabel.frame = .init(x: 48, y: 4, width: frame.width - 48, height: 16)
+        
+        titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 48).isActive = true
         
         flagButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
