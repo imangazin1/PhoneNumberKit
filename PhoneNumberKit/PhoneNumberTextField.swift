@@ -2,47 +2,20 @@
 //  PhoneNumberTextField.swift
 //  PhoneNumberKit
 //
-//  Created by Roy Marmelstein on 07/11/2015.
-//  Copyright © 2021 Roy Marmelstein. All rights reserved.
+//  Created by Akzhol Imangazin on 24.07.2024.
+//  Copyright © 2024 Roy Marmelstein. All rights reserved.
 //
-
-#if os(iOS)
 
 import Foundation
 import UIKit
 
-public struct TextFieldConfiguration {
-    public var titleText: String = ""
-    public var placeholder: String = ""
-    public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
-    public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
-    public var labelColor: UIColor = UIColor.black
-    public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
-    public var detailColor: UIColor = UIColor.lightGray
-    public var closeButton: UIImage?
-    
-    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil) {
-        self.titleText = titleText
-        self.placeholder = placeholder
-        self.flagStyle = flagStyle
-        self.labelFont = labelFont
-        self.labelColor = labelColor
-        self.detailFont = detailFont
-        self.detailColor = detailColor
-        self.closeButton = closeButton
-    }
-}
-
 /// Custom text field that formats phone numbers
 open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     public let phoneNumberKit: PhoneNumberKit
-    
-    public lazy var stackView = UIStackView()
-    public lazy var containerView = UIView()
+
     public lazy var titleLabel = UILabel()
     public lazy var flagButton = UIButton()
-    public lazy var errorStackView = UIStackView()
-    public lazy var errorTextFieldLabel = UILabel()
+    public lazy var bottomLineView = UIView()
     
     public var didTapFlag: (() -> Void)?
 
@@ -138,49 +111,14 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         }
     }
     
-    public var containerBackground: UIColor? {
+    public var lineColor: UIColor? {
         didSet {
-            containerView.backgroundColor = containerBackground
-        }
-    }
-    
-    public var containerCornerRadius: CGFloat? {
-        didSet {
-            containerView.layer.cornerRadius = containerCornerRadius ?? 0
-        }
-    }
-    
-    public var errorFont: UIFont? {
-        didSet {
-            errorTextFieldLabel.font = errorFont
+            bottomLineView.backgroundColor = lineColor
         }
     }
     
     public var selectedTitleColor: UIColor?
-    public var selectedBorderColor: UIColor?
-    public var errorColor: UIColor?
-    
-    public func showError(message: String) {
-        titleLabel.textColor = errorColor
-        containerView.layer.borderWidth = 2
-        containerView.layer.borderColor = errorColor?.cgColor
-        errorStackView.isHidden = false
-        errorTextFieldLabel.text = message
-        errorTextFieldLabel.textColor = errorColor
-        errorStackView.layoutIfNeeded()
-    }
-    
-    public func hideError() {
-        titleLabel.textColor = selectedTitleColor
-        setBorder(true)
-        errorStackView.isHidden = true
-        errorTextFieldLabel.text = ""
-    }
-    
-    private func setBorder(_ isActive: Bool) {
-        containerView.layer.borderWidth = isActive ? 2 : 0
-        containerView.layer.borderColor = isActive ? selectedBorderColor?.cgColor : nil
-    }
+    public var selectedLineColor: UIColor?
 
     #if compiler(>=5.1)
     /// Available on iOS 13 and above just.
@@ -391,69 +329,18 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     func setup() {
-        stylizeViews()
         self.autocorrectionType = .no
         self.keyboardType = .phonePad
-        
-        addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        containerView.addSubview(flagButton)
-        flagButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        [titleLabel, containerView, errorStackView].forEach {
-            stackView.addArrangedSubview($0)
-        }
-        
-        [errorTextFieldLabel].forEach {
-            errorStackView.addArrangedSubview($0)
-        }
+        addSubview(self.titleLabel)
+        addSubview(self.flagButton)
+        addSubview(self.bottomLineView)
         super.delegate = self
     }
     
-    func stylizeViews() {
-        clipsToBounds = false
-        addTarget(self, action: #selector(textFieldDidEditing), for: .editingDidEnd)
-        
-        stackView.axis = .vertical
-        stackView.spacing = 4
-
-        containerView.addGestureRecognizer(
-            UITapGestureRecognizer(target: self, action: #selector(placeholderDidTapped))
-        )
-        titleLabel.addGestureRecognizer(
-            UITapGestureRecognizer(target: self, action: #selector(placeholderDidTapped))
-        )
-        
-        errorStackView.isHidden = true
-        errorStackView.spacing = 4
-        errorStackView.alignment = .top
-        errorTextFieldLabel.numberOfLines = 0
-    }
-    
     func setupFrames() {
-        stackView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
-        
-        containerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        flagButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
-        flagButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        flagButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
-    }
-    
-    @objc func textFieldDidEditing() {
-        titleLabel.textColor = titleColor
-        setBorder(false)
-    }
-    
-    @objc func placeholderDidTapped() {
-        titleLabel.textColor = selectedTitleColor
-        setBorder(true)
-        becomeFirstResponder()
+        self.titleLabel.frame = .init(x: 0, y: 4, width: frame.width, height: 16)
+        self.flagButton.frame = .init(x: 0, y: 27, width: 24, height: 24)
+        self.bottomLineView.frame = .init(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
 
     func internationalPrefix(for countryCode: String) -> String? {
@@ -671,8 +558,8 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textFieldDidBeginEditing(_ textField: UITextField) {
-        setBorder(true)
         titleLabel.textColor = selectedTitleColor
+        bottomLineView.backgroundColor = selectedLineColor
         if self.withExamplePlaceholder, self.withPrefix, let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description, (text ?? "").isEmpty {
             text = "+" + countryCode + " "
         }
@@ -691,7 +578,7 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     @available (iOS 10.0, tvOS 10.0, *)
     open func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         titleLabel.textColor = titleColor
-        setBorder(false)
+        bottomLineView.backgroundColor = lineColor
         updateTextFieldDidEndEditing(textField)
         if let _delegate = _delegate {
             if (_delegate.responds(to: #selector(textFieldDidEndEditing(_:reason:)))) {
@@ -712,7 +599,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
 
     @available(iOS 13.0, tvOS 13.0, *)
     open func textFieldDidChangeSelection(_ textField: UITextField) {
-        self.hideError()
         self._delegate?.textFieldDidChangeSelection?(textField)
     }
 
@@ -772,12 +658,3 @@ extension PhoneNumberTextField {
         }
     }
 }
-
-
-extension String {
-  var isBlank: Bool {
-    return allSatisfy({ $0.isWhitespace })
-  }
-}
-
-#endif
