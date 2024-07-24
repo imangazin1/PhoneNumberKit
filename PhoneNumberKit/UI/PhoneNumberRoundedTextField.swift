@@ -401,6 +401,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         containerView.addSubview(flagButton)
         containerView.addSubview(titleLabel)
         flagButton.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         [containerView, errorStackView].forEach {
             stackView.addArrangedSubview($0)
@@ -438,10 +439,8 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
         stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
         
-        containerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-        titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 48).isActive = true
+        containerView.heightAnchor.constraint(equalToConstant: 56).isActive = true
+        self.titleLabel.frame = .init(x: 48, y: 4, width: frame.width - 48, height: 16)
         
         flagButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
