@@ -172,7 +172,7 @@ public class CountryCodePickerViewController: UITableViewController {
         super.viewDidLoad()
         view.addSubview(emptyView)
         emptyView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 2 - 100).isActive = true
+        emptyView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         emptyView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         emptyView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         emptyView.configure(icon: emptyIcon, title: emptyTitle, titleFont: emptyFont, textColor: emptyColor)
