@@ -48,17 +48,17 @@ class EmptyView: UIView {
         }
         
         imageView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0).isActive = true
-        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -32).isActive = true
         
         subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
-        subTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32).isActive = true
-        subTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32).isActive = true
+        subTitleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
+        subTitleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -32).isActive = true
         subTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
     }
     
