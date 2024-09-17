@@ -20,8 +20,13 @@ public struct TextFieldConfiguration {
     public var detailFont: UIFont = UIFont.preferredFont(forTextStyle: .subheadline)
     public var detailColor: UIColor = UIColor.lightGray
     public var closeButton: UIImage?
+    public var emptyIcon: UIImage?
+    public var emptyTitle: String?
+    public var emptySubtitle: String?
+    public var emptyFont: UIFont?
+    public var emptyColor: UIColor?
     
-    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil) {
+    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil, emptyIcon: UIImage? = nil, emptyTitle: String? = nil, emptySubtitle: String? = nil, emptyFont: UIFont? = nil, emptyColor: UIColor? = nil) {
         self.titleText = titleText
         self.placeholder = placeholder
         self.flagStyle = flagStyle
@@ -30,6 +35,11 @@ public struct TextFieldConfiguration {
         self.detailFont = detailFont
         self.detailColor = detailColor
         self.closeButton = closeButton
+        self.emptyIcon = emptyIcon
+        self.emptyTitle = emptyTitle
+        self.emptySubtitle = emptySubtitle
+        self.emptyFont = emptyFont
+        self.emptyColor = emptyColor
     }
 }
 
@@ -529,7 +539,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     @available(iOS 11.0, *)
     @objc func didPressFlagButton() {
         guard withDefaultPickerUI else { return }
-        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, titleText: configuration?.titleText ?? "", placeholder: configuration?.placeholder ?? "", selectedRegion: defaultRegion)
+        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, titleText: configuration?.titleText ?? "", placeholder: configuration?.placeholder ?? "", selectedRegion: defaultRegion, emptyIcon: configuration?.emptyIcon, emptyTitle: configuration?.emptyTitle, emptySubtitle: configuration?.emptySubtitle, emptyFont: configuration?.emptyFont, emptyColor: configuration?.emptyColor, labelColor: configuration?.labelColor)
         vc.delegate = self
         vc.configuration = configuration
         let nav = UINavigationController(rootViewController: vc)

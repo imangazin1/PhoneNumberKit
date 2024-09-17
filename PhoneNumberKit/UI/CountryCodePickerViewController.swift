@@ -34,6 +34,12 @@ public class CountryCodePickerViewController: UITableViewController {
     let placeholder: String
     let selectedRegion: String
     let commonCountryCodes: [String]
+    var emptyIcon: UIImage?
+    var emptyTitle: String?
+    var emptySubtitle: String?
+    var emptyFont: UIFont?
+    var emptyColor: UIColor?
+    var labelColor: UIColor?
 
     var shouldRestoreNavigationBarToHidden = false
 
@@ -79,6 +85,11 @@ public class CountryCodePickerViewController: UITableViewController {
 
     public weak var delegate: CountryCodePickerDelegate?
 
+    var emptyView = UIView()
+    var iconImageView = UIImageView()
+    var titleLabel = UILabel()
+    var subtitleLabel = UILabel()
+    
     lazy var cancelButton = UIKit.UIBarButtonItem(image: configuration?.closeButton, style: .plain, target: self, action: #selector(dismissAnimated))
     /**
      Init with a phone number kit instance. Because a PhoneNumberKit initialization is expensive you can must pass a pre-initialized instance to avoid incurring perf penalties.
@@ -91,13 +102,25 @@ public class CountryCodePickerViewController: UITableViewController {
         titleText: String,
         placeholder: String,
         selectedRegion: String,
-        commonCountryCodes: [String] = PhoneNumberKit.CountryCodePicker.commonCountryCodes)
+        commonCountryCodes: [String] = PhoneNumberKit.CountryCodePicker.commonCountryCodes,
+        emptyIcon: UIImage?,
+        emptyTitle: String?,
+        emptySubtitle: String?,
+        emptyFont: UIFont?,
+        emptyColor: UIColor?,
+        labelColor: UIColor?)
     {
         self.phoneNumberKit = phoneNumberKit
         self.titleText = titleText
         self.placeholder = placeholder
         self.selectedRegion = selectedRegion
         self.commonCountryCodes = commonCountryCodes
+        self.emptyIcon = emptyIcon
+        self.emptyTitle = emptyTitle
+        self.emptySubtitle = emptySubtitle
+        self.emptyFont = emptyFont
+        self.emptyColor = emptyColor
+        self.labelColor = labelColor
         super.init(style: .plain)
         self.commonInit()
         
@@ -132,6 +155,53 @@ public class CountryCodePickerViewController: UITableViewController {
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
         definesPresentationContext = true
+        setupEmptyView()
+    }
+    
+    func setupEmptyView() {
+        titleLabel.font = emptyFont
+        titleLabel.textColor = emptyColor
+        titleLabel.textAlignment = .center
+        subtitleLabel.font = emptyFont
+        subtitleLabel.textColor = emptyColor
+        subtitleLabel.textAlignment = .center
+        iconImageView.image = emptyIcon
+        titleLabel.text = emptyTitle
+        
+        [iconImageView, titleLabel, subtitleLabel].forEach {
+            emptyView.addSubview($0)
+        }
+        
+        iconImageView.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor, constant: 0).isActive = true
+        iconImageView.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor, constant: 0).isActive = true
+        iconImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        iconImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 16).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32).isActive = true
+        
+        subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4).isActive = true
+        subtitleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32).isActive = true
+        subtitleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32).isActive = true
+    }
+    
+    func checkEmptyState(query: String) {
+        let mainString = emptySubtitle?.replacingOccurrences(of: "%@", with: query) ?? ""
+        let queryString = "«\(query)»"
+        let range = (mainString as NSString).range(of: queryString)
+        let attributedText = NSMutableAttributedString(
+            string: mainString, attributes: [
+                .foregroundColor: emptyColor ?? .black,
+                .font: emptyFont ?? .systemFont(ofSize: 14)
+            ])
+        attributedText.addAttribute(
+            .foregroundColor,
+            value: labelColor ?? .black,
+            range: range)
+        
+        self.subtitleLabel.attributedText = attributedText
+        tableView.backgroundView = filteredCountries.isEmpty ? emptyView : nil
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -250,6 +320,7 @@ extension CountryCodePickerViewController: UISearchResultsUpdating {
                 country.prefix.lowercased().contains(searchText.lowercased())
         }
         tableView.reloadData()
+        checkEmptyState(query: searchText)
     }
 }
 
