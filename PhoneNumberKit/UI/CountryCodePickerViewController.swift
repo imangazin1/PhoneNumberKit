@@ -158,7 +158,7 @@ public class CountryCodePickerViewController: UITableViewController {
     }
     
     func checkEmptyState(query: String) {
-        emptyView.configure(icon: emptyIcon, title: emptyTitle, titleFont: emptyFont, textColor: emptyColor, subtitle: emptySubtitle, subtitleFont: emptySubtitleFont, subTitlecolor: labelColor, query: query)
+        emptyView.configureSubtitle(subtitle: emptySubtitle, subtitleFont: emptySubtitleFont, subTitlecolor: labelColor, textColor: emptyColor, query: query)
         if query.isEmpty {
             emptyView.isHidden = true
         } else {
@@ -172,9 +172,10 @@ public class CountryCodePickerViewController: UITableViewController {
         super.viewDidLoad()
         view.addSubview(emptyView)
         emptyView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        emptyView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIScreen.main.bounds.height / 2 - 100).isActive = true
         emptyView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         emptyView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        emptyView.configure(icon: emptyIcon, title: emptyTitle, titleFont: emptyFont, textColor: emptyColor)
     }
 
     public override func viewWillAppear(_ animated: Bool) {

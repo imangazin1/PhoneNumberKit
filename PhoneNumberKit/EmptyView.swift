@@ -47,24 +47,28 @@ class EmptyView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -50).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
         titleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 64).isActive = true
         
         subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
+        subTitleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
         subTitleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 64).isActive = true
     }
     
-    func configure(icon: UIImage?, title: String?, titleFont: UIFont?, textColor: UIColor?, subtitle: String?, subtitleFont: UIFont?, subTitlecolor: UIColor?, query: String) {
+    func configure(icon: UIImage?, title: String?, titleFont: UIFont?, textColor: UIColor?) {
         imageView.image = icon
         titleLabel.font = titleFont
         titleLabel.text = title
         titleLabel.textColor = textColor
-        
+    }
+    
+    func configureSubtitle(subtitle: String?, subtitleFont: UIFont?, subTitlecolor: UIColor?, textColor: UIColor?, query: String) {
         let mainString = subtitle?.replacingOccurrences(of: "%@", with: query) ?? ""
         let queryString = "«\(query)»"
         let range = (mainString as NSString).range(of: queryString)
