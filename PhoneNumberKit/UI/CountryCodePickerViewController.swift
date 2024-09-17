@@ -38,6 +38,7 @@ public class CountryCodePickerViewController: UITableViewController {
     var emptyTitle: String?
     var emptySubtitle: String?
     var emptyFont: UIFont?
+    var emptySubtitleFont: UIFont?
     var emptyColor: UIColor?
     var labelColor: UIColor?
 
@@ -107,6 +108,7 @@ public class CountryCodePickerViewController: UITableViewController {
         emptyTitle: String?,
         emptySubtitle: String?,
         emptyFont: UIFont?,
+        emptySubtitleFont: UIFont?,
         emptyColor: UIColor?,
         labelColor: UIColor?)
     {
@@ -119,6 +121,7 @@ public class CountryCodePickerViewController: UITableViewController {
         self.emptyTitle = emptyTitle
         self.emptySubtitle = emptySubtitle
         self.emptyFont = emptyFont
+        self.emptySubtitleFont = emptySubtitleFont
         self.emptyColor = emptyColor
         self.labelColor = labelColor
         super.init(style: .plain)
@@ -155,35 +158,39 @@ public class CountryCodePickerViewController: UITableViewController {
         navigationItem.hidesSearchBarWhenScrolling = !PhoneNumberKit.CountryCodePicker.alwaysShowsSearchBar
 
         definesPresentationContext = true
-        setupEmptyView()
     }
     
     func setupEmptyView() {
         titleLabel.font = emptyFont
         titleLabel.textColor = emptyColor
         titleLabel.textAlignment = .center
-        subtitleLabel.font = emptyFont
+        titleLabel.numberOfLines = 0
+        subtitleLabel.font = emptySubtitleFont
         subtitleLabel.textColor = emptyColor
         subtitleLabel.textAlignment = .center
+        subtitleLabel.numberOfLines = 0
         iconImageView.image = emptyIcon
         titleLabel.text = emptyTitle
         
+        emptyView.frame = tableView.bounds
         [iconImageView, titleLabel, subtitleLabel].forEach {
             emptyView.addSubview($0)
         }
         
-        iconImageView.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor, constant: 0).isActive = true
-        iconImageView.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor, constant: 0).isActive = true
-        iconImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        iconImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        
-        titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 16).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32).isActive = true
-        
-        subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4).isActive = true
-        subtitleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32).isActive = true
-        subtitleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32).isActive = true
+        NSLayoutConstraint.activate([
+            iconImageView.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor, constant: -50),
+            iconImageView.widthAnchor.constraint(equalToConstant: 100),
+            iconImageView.heightAnchor.constraint(equalToConstant: 100),
+            
+            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32),
+            titleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32),
+            
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            subtitleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32),
+            subtitleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32)
+        ])
     }
     
     func checkEmptyState(query: String) {
@@ -193,7 +200,7 @@ public class CountryCodePickerViewController: UITableViewController {
         let attributedText = NSMutableAttributedString(
             string: mainString, attributes: [
                 .foregroundColor: emptyColor ?? .black,
-                .font: emptyFont ?? .systemFont(ofSize: 14)
+                .font: emptySubtitleFont ?? .systemFont(ofSize: 14)
             ])
         attributedText.addAttribute(
             .foregroundColor,
@@ -201,7 +208,12 @@ public class CountryCodePickerViewController: UITableViewController {
             range: range)
         
         self.subtitleLabel.attributedText = attributedText
-        tableView.backgroundView = filteredCountries.isEmpty ? emptyView : nil
+        if filteredCountries.isEmpty {
+            setupEmptyView()
+            tableView.backgroundView = emptyView
+        } else {
+            tableView.backgroundView = nil
+        }
     }
 
     public override func viewWillAppear(_ animated: Bool) {
