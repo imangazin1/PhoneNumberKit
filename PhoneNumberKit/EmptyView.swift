@@ -47,19 +47,16 @@ class EmptyView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        imageView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 0).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 0).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -32).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 64).isActive = true
         
         subTitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8).isActive = true
-        subTitleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
-        subTitleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -32).isActive = true
-        subTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        subTitleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 64).isActive = true
     }
     
     func configure(icon: UIImage?, title: String?, titleFont: UIFont?, textColor: UIColor?, subtitle: String?, subtitleFont: UIFont?, subTitlecolor: UIColor?, query: String) {
