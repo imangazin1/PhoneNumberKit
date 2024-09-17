@@ -170,6 +170,7 @@ public class CountryCodePickerViewController: UITableViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        emptyView.isHidden = true
         view.addSubview(emptyView)
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         emptyView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true

@@ -47,7 +47,7 @@ class EmptyView: UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 250).isActive = true
+        imageView.topAnchor.constraint(equalTo: topAnchor, constant: 200).isActive = true
         imageView.leftAnchor.constraint(equalTo: leftAnchor, constant: UIScreen.main.bounds.width / 2 - 50).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
