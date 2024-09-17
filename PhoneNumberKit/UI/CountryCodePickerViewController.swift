@@ -214,6 +214,7 @@ public class CountryCodePickerViewController: UITableViewController {
         } else {
             tableView.backgroundView = nil
         }
+        tableView.reloadData()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -331,8 +332,8 @@ extension CountryCodePickerViewController: UISearchResultsUpdating {
                 country.code.lowercased().contains(searchText.lowercased()) ||
                 country.prefix.lowercased().contains(searchText.lowercased())
         }
-        tableView.reloadData()
         checkEmptyState(query: searchText)
+        tableView.reloadData()
     }
 }
 
