@@ -86,10 +86,7 @@ public class CountryCodePickerViewController: UITableViewController {
 
     public weak var delegate: CountryCodePickerDelegate?
 
-    var emptyView = UIView()
-    var iconImageView = UIImageView()
-    var titleLabel = UILabel()
-    var subtitleLabel = UILabel()
+    var emptyView = EmptyView()
     
     lazy var cancelButton = UIKit.UIBarButtonItem(image: configuration?.closeButton, style: .plain, target: self, action: #selector(dismissAnimated))
     /**
@@ -160,61 +157,19 @@ public class CountryCodePickerViewController: UITableViewController {
         definesPresentationContext = true
     }
     
-    func setupEmptyView() {
-        titleLabel.font = emptyFont
-        titleLabel.textColor = emptyColor
-        titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 0
-        subtitleLabel.font = emptySubtitleFont
-        subtitleLabel.textColor = emptyColor
-        subtitleLabel.textAlignment = .center
-        subtitleLabel.numberOfLines = 0
-        iconImageView.image = emptyIcon
-        titleLabel.text = emptyTitle
-        
-        emptyView.frame = tableView.bounds
-        [iconImageView, titleLabel, subtitleLabel].forEach {
-            emptyView.addSubview($0)
-        }
-        
-        NSLayoutConstraint.activate([
-            iconImageView.centerXAnchor.constraint(equalTo: emptyView.centerXAnchor),
-            iconImageView.centerYAnchor.constraint(equalTo: emptyView.centerYAnchor, constant: -50),
-            iconImageView.widthAnchor.constraint(equalToConstant: 100),
-            iconImageView.heightAnchor.constraint(equalToConstant: 100),
-            
-            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32),
-            
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            subtitleLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 32),
-            subtitleLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -32)
-        ])
+    func checkEmptyState(query: String) {
+        emptyView.configure(icon: emptyIcon, title: emptyTitle, titleFont: emptyFont, textColor: emptyColor, subtitle: emptySubtitle, subtitleFont: emptySubtitleFont, subTitlecolor: labelColor, query: query)
+        tableView.backgroundView = filteredCountries.isEmpty ? emptyView : nil
+        tableView.reloadData()
     }
     
-    func checkEmptyState(query: String) {
-        let mainString = emptySubtitle?.replacingOccurrences(of: "%@", with: query) ?? ""
-        let queryString = "«\(query)»"
-        let range = (mainString as NSString).range(of: queryString)
-        let attributedText = NSMutableAttributedString(
-            string: mainString, attributes: [
-                .foregroundColor: emptyColor ?? .black,
-                .font: emptySubtitleFont ?? .systemFont(ofSize: 14)
-            ])
-        attributedText.addAttribute(
-            .foregroundColor,
-            value: labelColor ?? .black,
-            range: range)
-        
-        self.subtitleLabel.attributedText = attributedText
-        if filteredCountries.isEmpty {
-            setupEmptyView()
-            tableView.backgroundView = emptyView
-        } else {
-            tableView.backgroundView = nil
-        }
-        tableView.reloadData()
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(emptyView)
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
+        emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
     }
 
     public override func viewWillAppear(_ animated: Bool) {
