@@ -27,7 +27,7 @@ public struct TextFieldConfiguration {
     public var emptyFont: UIFont?
     public var emptyColor: UIColor?
     
-    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil, emptyIcon: UIImage? = nil, emptyTitle: String? = nil, emptySubtitle: String? = nil, emptyFont: UIFont? = nil, emptyColor: UIColor? = nil) {
+    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil, cancelText: String? = nil, emptyIcon: UIImage? = nil, emptyTitle: String? = nil, emptySubtitle: String? = nil, emptyFont: UIFont? = nil, emptyColor: UIColor? = nil) {
         self.titleText = titleText
         self.placeholder = placeholder
         self.flagStyle = flagStyle
@@ -36,6 +36,7 @@ public struct TextFieldConfiguration {
         self.detailFont = detailFont
         self.detailColor = detailColor
         self.closeButton = closeButton
+        self.cancelText = cancelText
         self.emptyIcon = emptyIcon
         self.emptyTitle = emptyTitle
         self.emptySubtitle = emptySubtitle
