@@ -34,6 +34,7 @@ public class CountryCodePickerViewController: UITableViewController {
     let placeholder: String
     let selectedRegion: String
     let commonCountryCodes: [String]
+    var cancelText: String?
     var emptyIcon: UIImage?
     var emptyTitle: String?
     var emptySubtitle: String?
@@ -101,6 +102,7 @@ public class CountryCodePickerViewController: UITableViewController {
         placeholder: String,
         selectedRegion: String,
         commonCountryCodes: [String] = PhoneNumberKit.CountryCodePicker.commonCountryCodes,
+        cancelText: String?,
         emptyIcon: UIImage?,
         emptyTitle: String?,
         emptySubtitle: String?,
@@ -114,6 +116,7 @@ public class CountryCodePickerViewController: UITableViewController {
         self.placeholder = placeholder
         self.selectedRegion = selectedRegion
         self.commonCountryCodes = commonCountryCodes
+        self.cancelText = cancelText
         self.emptyIcon = emptyIcon
         self.emptyTitle = emptyTitle
         self.emptySubtitle = emptySubtitle
@@ -148,6 +151,7 @@ public class CountryCodePickerViewController: UITableViewController {
             "PhoneNumberKit.CountryCodePicker.SearchBarPlaceholder",
             value: placeholder,
             comment: "Placeholder for country code search field")
+        searchController.searchBar.setValue(cancelText, forKey: "cancelButtonText")
 
         UINavigationBar.appearance().tintColor = .black
         UIBarButtonItem.appearance().tintColor = UIColor.black
