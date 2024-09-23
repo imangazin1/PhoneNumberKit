@@ -28,9 +28,10 @@ public struct TextFieldConfiguration {
     public var emptyFont: UIFont?
     public var emptyColor: UIColor?
     
-    public init(titleText: String, placeholder: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil, cancelText: String? = nil, emptyIcon: UIImage? = nil, emptyTitle: String? = nil, emptySubtitle: String? = nil, emptyFont: UIFont? = nil, emptyColor: UIColor? = nil) {
+    public init(titleText: String, placeholder: String, locale: String, flagStyle: CountryFlagStyle, labelFont: UIFont, labelColor: UIColor, detailFont: UIFont, detailColor: UIColor, closeButton: UIImage? = nil, cancelText: String? = nil, emptyIcon: UIImage? = nil, emptyTitle: String? = nil, emptySubtitle: String? = nil, emptyFont: UIFont? = nil, emptyColor: UIColor? = nil) {
         self.titleText = titleText
         self.placeholder = placeholder
+        self.locale = locale
         self.flagStyle = flagStyle
         self.labelFont = labelFont
         self.labelColor = labelColor
