@@ -14,6 +14,7 @@ import UIKit
 public struct TextFieldConfiguration {
     public var titleText: String = ""
     public var placeholder: String = ""
+    public var locale: String = ""
     public var flagStyle: CountryFlagStyle = CountryFlagStyle.normal
     public var labelFont: UIFont = UIFont.preferredFont(forTextStyle: .title3)
     public var labelColor: UIColor = UIColor.black
@@ -541,7 +542,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     @available(iOS 11.0, *)
     @objc func didPressFlagButton() {
         guard withDefaultPickerUI else { return }
-        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, titleText: configuration?.titleText ?? "", placeholder: configuration?.placeholder ?? "", selectedRegion: defaultRegion, cancelText: configuration?.cancelText, emptyIcon: configuration?.emptyIcon, emptyTitle: configuration?.emptyTitle, emptySubtitle: configuration?.emptySubtitle, emptyFont: configuration?.emptyFont, emptySubtitleFont: configuration?.detailFont, emptyColor: configuration?.emptyColor, labelColor: configuration?.labelColor)
+        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit, titleText: configuration?.titleText ?? "", placeholder: configuration?.placeholder ?? "", selectedRegion: defaultRegion, localeIdentifier: configuration?.locale ?? "ru", cancelText: configuration?.cancelText, emptyIcon: configuration?.emptyIcon, emptyTitle: configuration?.emptyTitle, emptySubtitle: configuration?.emptySubtitle, emptyFont: configuration?.emptyFont, emptySubtitleFont: configuration?.detailFont, emptyColor: configuration?.emptyColor, labelColor: configuration?.labelColor)
         vc.delegate = self
         vc.configuration = configuration
         let nav = UINavigationController(rootViewController: vc)

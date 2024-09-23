@@ -33,6 +33,7 @@ public class CountryCodePickerViewController: UITableViewController {
     let titleText: String
     let placeholder: String
     let selectedRegion: String
+    let localeIdentifier: String
     let commonCountryCodes: [String]
     var cancelText: String?
     var emptyIcon: UIImage?
@@ -50,7 +51,7 @@ public class CountryCodePickerViewController: UITableViewController {
 
     lazy var allCountries = phoneNumberKit
         .allCountries()
-        .compactMap({ Country(for: $0, with: self.phoneNumberKit) })
+        .compactMap({ Country(for: $0, with: self.phoneNumberKit, localeIdentifier: self.localeIdentifier) })
         .sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
 
     lazy var countries: [[Country]] = {
@@ -69,11 +70,11 @@ public class CountryCodePickerViewController: UITableViewController {
                 return collection
             }
 
-        let popular = commonCountryCodes.compactMap({ Country(for: $0, with: phoneNumberKit) })
+        let popular = commonCountryCodes.compactMap({ Country(for: $0, with: phoneNumberKit, localeIdentifier: localeIdentifier) })
 
         var result: [[Country]] = []
         // Note we should maybe use the user's current carrier's country code?
-        if hasCurrent, let current = Country(for: selectedRegion, with: phoneNumberKit) {
+        if hasCurrent, let current = Country(for: selectedRegion, with: phoneNumberKit, localeIdentifier: localeIdentifier) {
             result.append([current])
         }
         hasCommon = hasCommon && !popular.isEmpty
@@ -101,6 +102,7 @@ public class CountryCodePickerViewController: UITableViewController {
         titleText: String,
         placeholder: String,
         selectedRegion: String,
+        localeIdentifier: String,
         commonCountryCodes: [String] = PhoneNumberKit.CountryCodePicker.commonCountryCodes,
         cancelText: String?,
         emptyIcon: UIImage?,
@@ -115,6 +117,7 @@ public class CountryCodePickerViewController: UITableViewController {
         self.titleText = titleText
         self.placeholder = placeholder
         self.selectedRegion = selectedRegion
+        self.localeIdentifier = localeIdentifier
         self.commonCountryCodes = commonCountryCodes
         self.cancelText = cancelText
         self.emptyIcon = emptyIcon
@@ -134,6 +137,7 @@ public class CountryCodePickerViewController: UITableViewController {
         self.titleText = "Сode of the country"
         self.placeholder = "Country"
         self.selectedRegion = "KZ"
+        self.localeIdentifier = "ru"
         self.commonCountryCodes = PhoneNumberKit.CountryCodePicker.commonCountryCodes
         super.init(coder: aDecoder)
         self.commonInit()
@@ -315,10 +319,10 @@ public extension CountryCodePickerViewController {
         public var name: String
         public var prefix: String
 
-        public init?(for countryCode: String, with phoneNumberKit: PhoneNumberKit) {
+        public init?(for countryCode: String, with phoneNumberKit: PhoneNumberKit, localeIdentifier: String) {
             let flagBase = UnicodeScalar("🇦").value - UnicodeScalar("A").value
             guard
-                let name = (Locale.current as NSLocale).localizedString(forCountryCode: countryCode),
+                let name = (Locale(identifier: localeIdentifier) as NSLocale).localizedString(forCountryCode: countryCode),
                 let prefix = phoneNumberKit.countryCode(for: countryCode)?.description
             else {
                 return nil
