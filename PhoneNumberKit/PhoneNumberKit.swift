@@ -90,13 +90,13 @@ public final class PhoneNumberKit {
             if prefix == false {
                 return formattedNationalNumber
             }
-            return "+\(phoneNumber.countryCode)\(formattedNationalNumber)"
+            return "+\(phoneNumber.countryCode)"
         } else {
             let formatter = Formatter(phoneNumberKit: self)
             let regionMetadata = self.metadataManager.mainTerritory(forCode: phoneNumber.countryCode)
             let formattedNationalNumber = formatter.format(phoneNumber: phoneNumber, formatType: formatType, regionMetadata: regionMetadata)
             if formatType == .international, prefix == true {
-                return "+\(phoneNumber.countryCode) \(formattedNationalNumber)"
+                return "+\(phoneNumber.countryCode)"
             } else {
                 return formattedNationalNumber
             }
