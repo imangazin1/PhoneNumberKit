@@ -176,12 +176,13 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     
     public func showError(message: String) {
         titleLabel.textColor = errorColor
-        containerView.layer.borderWidth = 2
+        containerView.layer.borderWidth = 1
         containerView.layer.borderColor = errorColor?.cgColor
         errorStackView.isHidden = false
         errorTextFieldLabel.text = message
         errorTextFieldLabel.textColor = errorColor
         errorStackView.layoutIfNeeded()
+        insets?.bottom = 8
     }
     
     public func hideError() {
@@ -189,6 +190,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         setBorder(true)
         errorStackView.isHidden = true
         errorTextFieldLabel.text = ""
+        insets?.bottom = -8
     }
     
     private func setBorder(_ isActive: Bool) {
