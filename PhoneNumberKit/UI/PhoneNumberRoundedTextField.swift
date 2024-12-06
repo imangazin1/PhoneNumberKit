@@ -134,21 +134,12 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         }
     }
     
-    public var title: String? {
-        didSet {
-            titleLabel.text = title
-        }
-    }
+    public var title: String?
+    public var titleColor: UIColor?
     
     public var titleFont: UIFont? {
         didSet {
             titleLabel.font = titleFont
-        }
-    }
-    
-    public var titleColor: UIColor? {
-        didSet {
-            titleLabel.textColor = titleColor
         }
     }
     
@@ -174,8 +165,33 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     public var selectedBorderColor: UIColor?
     public var errorColor: UIColor?
     
+    public func setTitleLabelText(_ color: UIColor?) {
+        guard
+            let title,
+            let color
+        else {
+            return
+        }
+        let titleString = NSMutableAttributedString()
+        titleString.append(
+            NSAttributedString(string: title, attributes: [
+                .font: titleFont ?? .systemFont(ofSize: 12),
+                .foregroundColor: color
+            ])
+        )
+        if isRequired {
+            titleString.append(
+                NSAttributedString(string: "*", attributes: [
+                    .font: titleFont ?? .systemFont(ofSize: 12),
+                    .foregroundColor: errorColor ?? .systemRed
+                ])
+            )
+        }
+        titleLabel.attributedText = titleString
+    }
+    
     public func showError(message: String) {
-        titleLabel.textColor = errorColor
+        setTitleLabelText(errorColor)
         containerView.layer.borderWidth = 1
         containerView.layer.borderColor = errorColor?.cgColor
         errorStackView.isHidden = false
@@ -186,7 +202,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     }
     
     public func hideError() {
-        titleLabel.textColor = selectedTitleColor
+        setTitleLabelText(selectedTitleColor)
         setBorder(true)
         errorStackView.isHidden = true
         errorTextFieldLabel.text = ""
@@ -327,6 +343,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     // MARK: - Insets
     private var insets: UIEdgeInsets?
     private var clearButtonPadding: CGFloat?
+    private var isRequired: Bool = false
 
     // MARK: Lifecycle
 
@@ -385,10 +402,11 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
          button and the edges of the text field. A positive value increases the distance between the clear button and the
          text field's edges, and a negative value decreases this distance.
     */
-    public init(insets: UIEdgeInsets, clearButtonPadding: CGFloat) {
+    public init(insets: UIEdgeInsets, clearButtonPadding: CGFloat, isRequired: Bool = false) {
         self.phoneNumberKit = PhoneNumberKit()
         self.insets = insets
         self.clearButtonPadding = clearButtonPadding
+        self.isRequired = isRequired
         super.init(frame: .zero)
         self.setup()
     }
@@ -467,12 +485,12 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     }
     
     @objc func textFieldDidEditing() {
-        titleLabel.textColor = titleColor
+        setTitleLabelText(titleColor)
         setBorder(false)
     }
     
     @objc func placeholderDidTapped() {
-        titleLabel.textColor = selectedTitleColor
+        setTitleLabelText(selectedTitleColor)
         setBorder(true)
         becomeFirstResponder()
     }
@@ -693,7 +711,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
 
     open func textFieldDidBeginEditing(_ textField: UITextField) {
         setBorder(true)
-        titleLabel.textColor = selectedTitleColor
+        setTitleLabelText(selectedTitleColor)
         if self.withExamplePlaceholder, self.withPrefix, let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description, (text ?? "").isEmpty {
             text = "+" + countryCode + " "
         }
@@ -711,7 +729,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
 
     @available (iOS 10.0, tvOS 10.0, *)
     open func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        titleLabel.textColor = titleColor
+        setTitleLabelText(titleColor)
         setBorder(false)
         updateTextFieldDidEndEditing(textField)
         if let _delegate = _delegate {
