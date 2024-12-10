@@ -181,7 +181,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         )
         if isRequired {
             titleString.append(
-                NSAttributedString(string: "*", attributes: [
+                NSAttributedString(string: " *", attributes: [
                     .font: titleFont ?? .systemFont(ofSize: 12),
                     .foregroundColor: errorColor ?? .systemRed
                 ])
