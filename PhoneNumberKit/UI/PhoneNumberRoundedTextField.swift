@@ -55,6 +55,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     public lazy var containerView = UIView()
     public lazy var titleLabel = UILabel()
     public lazy var flagButton = UIButton()
+    public lazy var arrowImageView = UIImageView()
     public lazy var errorStackView = UIStackView()
     public lazy var errorTextFieldLabel = UILabel()
     
@@ -136,6 +137,12 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     
     public var title: String?
     public var titleColor: UIColor?
+
+    public var arrowImage: UIImage? {
+        didSet {
+            arrowImageView.image = arrowImage
+        }
+    }
     
     public var titleFont: UIFont? {
         didSet {
@@ -433,8 +440,10 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         containerView.addSubview(flagButton)
+        containerView.addSubview(arrowImageView)
         containerView.addSubview(titleLabel)
         flagButton.translatesAutoresizingMaskIntoConstraints = false
+        arrowImageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         [containerView, errorStackView].forEach {
@@ -476,12 +485,17 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         containerView.heightAnchor.constraint(equalToConstant: 56).isActive = true
         
         titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 48).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: insets?.left ?? 70).isActive = true
         
         flagButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         flagButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12).isActive = true
         flagButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         flagButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        arrowImageView.centerYAnchor.constraint(equalTo: flagButton.centerYAnchor).isActive = true
+        arrowImageView.leadingAnchor.constraint(equalTo: flagButton.trailingAnchor, constant: 2).isActive = true
+        arrowImageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        arrowImageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
     @objc func textFieldDidEditing() {
