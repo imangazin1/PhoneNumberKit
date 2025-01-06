@@ -671,6 +671,13 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
         guard self._delegate?.textField?(textField, shouldChangeCharactersIn: range, replacementString: string) ?? true else {
             return false
         }
+        
+        if let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description {
+            let code = "+" + countryCode
+            if string == "" && text.count <= code.count {
+                return false
+            }
+        }
         guard self.isPartialFormatterEnabled else {
             return true
         }
