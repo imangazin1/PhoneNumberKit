@@ -137,6 +137,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     
     public var title: String?
     public var titleColor: UIColor?
+    public var textTitleColor: UIColor?
 
     public var arrowImage: UIImage? {
         didSet {
@@ -767,6 +768,18 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
     open func textFieldDidChangeSelection(_ textField: UITextField) {
         self.hideError()
         self._delegate?.textFieldDidChangeSelection?(textField)
+        
+        if let text = textField.text,
+           let countryCode = phoneNumberKit.countryCode(for: currentRegion)?.description {
+            let code = "+" + countryCode
+            guard text.contains(code) else {
+                return
+            }
+            let attributedString = NSMutableAttributedString(string: text)
+            attributedString.addAttribute(.foregroundColor, value: textTitleColor ?? .lightGray, range: NSRange(location: 0, length: code.count))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: NSRange(location: code.count, length: text.count - code.count))
+            textField.attributedText = attributedString
+        }
     }
 
     private func updateTextFieldDidEndEditing(_ textField: UITextField) {
