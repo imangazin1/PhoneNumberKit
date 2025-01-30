@@ -805,7 +805,7 @@ open class PhoneNumberRoundedTextField: UITextField, UITextFieldDelegate {
 extension PhoneNumberRoundedTextField: CountryCodePickerDelegate {
 
     public func countryCodePickerViewControllerDidPickCountry(_ country: CountryCodePickerViewController.Country) {
-        text = isEditing ? "+" + country.prefix : ""
+        text = isEditing ? country.prefix : ""
         _defaultRegion = country.code
         partialFormatter.defaultRegion = country.code
         updateFlag()
